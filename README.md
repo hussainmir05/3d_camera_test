@@ -8,6 +8,12 @@
 5. Compare measured distances with ground truth
 
 
+The stair regions used for plane fitting and measurement were segmented manually on the RGB image as shown below 
+
+
+| Original RGB Image | Segmented Stair Regions |
+|---|---|
+| <img src="ground_truth_rgb_img.bmp" width="250">| <img src="segment_rgb.png" width="250">  |
 ## Measured Step Heights
 
 | Step Pair | Auto Exposure (0.8, 3.6, 6.4) | Error | Auto Exposure (3.6) | Error | Auto Exposure (6.4) | Error | Auto Exposure (51.2) | Error | Ground Truth |
