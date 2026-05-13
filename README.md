@@ -24,7 +24,6 @@ The stair regions used for plane fitting and measurement were segmented manually
 | Step 4 → Step 5 | 7.973 mm | 0.027 mm | 7.969 mm | 0.031 mm | 7.980 mm | 0.020 mm | 7.909 mm | 0.091 mm | 8 mm |
 | **Average Error** |  | **0.035 mm** |  | **0.032 mm** |  | **0.033 mm** |  | **0.066 mm** |  |
 
-## Measured Step exposure = 6.4
 
 ## Measured Step Exposure = 6.4
 
