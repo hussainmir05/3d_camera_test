@@ -1,37 +1,56 @@
 # 3d_camera_test
-## Method
-
+## Plane to Plane Distance
+Method 
 1. Load RGB + 3D point cloud data
 2. Crop each stair region using polygon ROI
 3. Fit a plane to each stair surface using SVD
 4. Compute perpendicular plane-to-plane distance
 5. Compare measured distances with ground truth
-
-
 The stair regions used for plane fitting and measurement were segmented manually on the RGB image as shown below 
-
 
 | Original RGB Image | Segmented Stair Regions |
 |---|---|
 | <img src="ground_truth_rgb_img.bmp" width="250">| <img src="segment_rgb.png" width="250">  |
-## Measured Step Heights wit Camera object height =63
 
-| Step Pair | Auto Exposure (0.8, 3.6, 6.4) | Error | Exposure (3.6) | Error | Auto Exposure (6.4) | Error | Auto Exposure (51.2) | Error | Ground Truth |
-|---|---|---|---|---|---|---|---|---|---|
-| Step 1 → Step 2 | 0.994 mm | 0.006 mm | 0.994 mm | 0.006 mm | 1.000 mm | 0.000 mm | 0.986 mm | 0.014 mm | 1 mm |
-| Step 2 → Step 3 | 1.955 mm | 0.045 mm | 1.976 mm | 0.024 mm | 1.941 mm | 0.059 mm | 1.932 mm | 0.068 mm | 2 mm |
-| Step 3 → Step 4 | 3.938 mm | 0.062 mm | 3.932 mm | 0.068 mm | 3.948 mm | 0.052 mm | 3.908 mm | 0.092 mm | 4 mm |
-| Step 4 → Step 5 | 7.973 mm | 0.027 mm | 7.969 mm | 0.031 mm | 7.980 mm | 0.020 mm | 7.909 mm | 0.091 mm | 8 mm |
-| **Average Error** |  | **0.035 mm** |  | **0.032 mm** |  | **0.033 mm** |  | **0.066 mm** |  |
 
-## Measured Step exposure = 6.4
+| Cam Distance     | Step 1 → 2 (mm) | Step 2 → 3 (mm) | Step 3 → 4 (mm) | Step 4 → 5 (mm) | Error (RMSE mm) |
+| ---------------- | --------------- | --------------- | --------------- | --------------- | --------------- |
+| 43 cm            | 1.013           | 1.993           | 4.012           | 8.060           | 0.022           |
+| 53 cm            | 1.009           | 1.983           | 3.976           | 8.041           | 0.022           |
+| 63 cm            | 0.994           | 1.956           | 3.938           | 7.973           | 0.047           |
+| 73 cm            | 15.319          | 1.890           | 3.851           | 7.705           | 3.580           |
+| **Ground Truth** | **1**           | **2**           | **4**           | **8**           | —               |
 
-## Measured Step Exposure = 6.4
+##  Point to Plane Error 
+After fitting a plane to each segmented stair surface using SVD, the point-to-plane residuals are computed to evaluate surface fitting quality and noise consistency across different camera distances.
 
-| Step Pair | 70 cm | Error | 63 cm | Error | 53 cm | Error | 43 cm | Error | Ground Truth |
-|---|---|---|---|---|---|---|---|---|---|
-| Step 1 → Step 2 | 0.981 mm | 0.019 mm | 1.000 mm | 0.000 mm | 1.015 mm | 0.015 mm | 1.018 mm | 0.018 mm | 1 mm |
-| Step 2 → Step 3 | 1.953 mm | 0.047 mm | 1.941 mm | 0.059 mm | 1.981 mm | 0.019 mm | 1.988 mm | 0.012 mm | 2 mm |
-| Step 3 → Step 4 | 3.875 mm | 0.125 mm | 3.948 mm | 0.052 mm | 3.971 mm | 0.029 mm | 4.010 mm | 0.010 mm | 4 mm |
-| Step 4 → Step 5 | 7.738 mm | 0.262 mm | 7.980 mm | 0.020 mm | 8.038 mm | 0.038 mm | 8.044 mm | 0.044 mm | 8 mm |
-| **Average Error** |  | **0.113 mm** |  | **0.033 mm** |  | **0.025 mm** |  | **0.021 mm** |  |
+The error metrics are reported as:
+
+MAE (Mean Absolute Error): average deviation of points from the fitted plane
+STD (Standard Deviation): spread of point-to-plane residuals (surface noise)
+ MAE (mm)
+| Step | 45 cm | 53 cm | 63 cm | 70 cm |
+| ---- | ----- | ----- | ----- | ----- |
+| 1    | 0.216 | 0.265 | 0.189 | 0.267 |
+| 2    | 0.215 | 0.268 | 0.186 | 0.268 |
+| 3    | 0.222 | 0.265 | 0.185 | 0.266 |
+| 4    | 0.224 | 0.256 | 0.186 | 0.259 |
+| 5    | 0.220 | 0.237 | 0.190 | 0.251 |
+
+STD (mm)
+| Step | 45 cm | 53 cm | 63 cm | 70 cm |
+| ---- | ----- | ----- | ----- | ----- |
+| 1    | 0.148 | 0.188 | 0.150 | 0.256 |
+| 2    | 0.148 | 0.200 | 0.149 | 0.220 |
+| 3    | 0.159 | 0.197 | 0.153 | 0.220 |
+| 4    | 0.154 | 0.189 | 0.148 | 0.208 |
+| 5    | 0.283 | 0.177 | 0.149 | 0.205 |
+
+Number of Points per Plane
+| Step | 45 cm   | 53 cm   | 63 cm   | 70 cm   |
+| ---- | ------- | ------- | ------- | ------- |
+| 1    | 375,926 | 594,901 | 663,107 | 340,247 |
+| 2    | 486,701 | 473,272 | 443,501 | 223,287 |
+| 3    | 481,151 | 465,429 | 440,647 | 221,181 |
+| 4    | 482,891 | 478,708 | 441,686 | 221,604 |
+| 5    | 717,197 | 624,440 | 658,972 | 336,100 |
